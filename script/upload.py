@@ -3,7 +3,7 @@ from pathlib import Path
 
 here = Path(__file__).absolute().parent.parent
 
-package_name = "example"  # TODO Custom package name
+package_name = "indexpy_auth"
 
 
 def get_version(package: str = package_name) -> str:
