@@ -20,6 +20,8 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.7"
 
+"index.py" = "^0.18.6"
+
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}
 isort = "*"
