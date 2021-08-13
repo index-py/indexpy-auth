@@ -6,9 +6,8 @@ from indexpy_auth.middlewares import NeedAuthentication
 
 app = Index(debug=True)
 
-docs = OpenAPI("", "", "")
-docs.openapi["components"].setdefault("securitySchemes", {}).update(
-    {
+docs = OpenAPI(
+    security_schemes={
         "BearerAuth": {
             "type": "http",
             "scheme": "bearer",
