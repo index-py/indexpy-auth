@@ -1,29 +1,16 @@
 from indexpy import Index, Routes
 from indexpy.openapi import OpenAPI
-from indexpy.openapi.functions import describe_extra_docs
 
 from indexpy_auth.middlewares import NeedAuthentication
 
 app = Index(debug=True)
 
-docs = OpenAPI(
-    security_schemes={
-        "BearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT",
-        },
-    }
-)
+docs = OpenAPI(security_schemes=NeedAuthentication.security_scheme)
 
 app.router << "/docs" // docs.routes
 
 
 class AuthMiddleware(NeedAuthentication):
-    def __init__(self, endpoint):
-        super().__init__(endpoint)
-        describe_extra_docs(endpoint, {"security": [{"BearerAuth": []}]})
-
     async def authenticate(self, token: str) -> bool:
         return True
 
