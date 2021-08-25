@@ -16,13 +16,7 @@ class Message(BaseModel):
 
 
 class NeedAuthentication(Generic[T_Response], metaclass=abc.ABCMeta):
-    security_scheme = {
-        "BearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT",
-        }
-    }
+    security_scheme = {"BearerAuth": {"type": "http", "scheme": "bearer"}}
 
     def __init__(self, endpoint: Callable[[], Awaitable[T_Response]]) -> None:
         self.endpoint = endpoint
@@ -63,6 +57,7 @@ class NeedAuthentication(Generic[T_Response], metaclass=abc.ABCMeta):
                 headers={"WWW-Authenticate": "Bearer"},
                 content={"message": HTTPStatus.UNAUTHORIZED.description},
             )
+        request.state.authorization_token = token
         return await self.endpoint()
 
     @abc.abstractmethod

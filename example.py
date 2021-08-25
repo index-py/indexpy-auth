@@ -2,6 +2,7 @@ from typing import Annotated
 from indexpy import Index, Routes, PlainTextResponse
 from indexpy.openapi import OpenAPI
 
+from indexpy_auth.views import LogInAndOut
 from indexpy_auth.middlewares import NeedAuthentication
 
 app = Index(debug=True)
@@ -36,3 +37,12 @@ async def user() -> Annotated[str, PlainTextResponse[200]]:
 
 
 app.router << routes
+
+
+@app.router.http("/token")
+class Token(LogInAndOut):
+    async def login(self, username: str, password: str) -> str:
+        return username + password
+
+    async def logout(self, token: str) -> None:
+        return None
