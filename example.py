@@ -1,4 +1,5 @@
-from indexpy import Index, Routes
+from typing import Annotated
+from indexpy import Index, Routes, PlainTextResponse
 from indexpy.openapi import OpenAPI
 
 from indexpy_auth.middlewares import NeedAuthentication
@@ -12,14 +13,14 @@ app.router << "/docs" // docs.routes
 
 class AuthMiddleware(NeedAuthentication):
     async def authenticate(self, token: str) -> bool:
-        return True
+        return token == "qwertyuiopasdfghjklzxcvbnm"
 
 
 routes = Routes(http_middlewares=[AuthMiddleware])
 
 
 @routes.http.get("/")
-async def index():
+async def index() -> Annotated[str, PlainTextResponse[200]]:
     """
     index
     """
@@ -27,7 +28,7 @@ async def index():
 
 
 @routes.http.get("/user")
-async def user():
+async def user() -> Annotated[str, PlainTextResponse[200]]:
     """
     user
     """

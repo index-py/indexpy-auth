@@ -2,12 +2,17 @@ from __future__ import annotations
 
 import abc
 from http import HTTPStatus
-from typing import Awaitable, Callable, Generic, TypeVar
+from typing import Annotated, Awaitable, Callable, Generic, TypeVar
 
-from indexpy import request, HTTPException, status
-from indexpy.openapi import describe_extra_docs, describe_response
+from indexpy import HTTPException, JSONResponse, request, status
+from indexpy.openapi import describe_extra_docs
+from pydantic import BaseModel
 
 T_Response = TypeVar("T_Response")
+
+
+class Message(BaseModel):
+    message: str
 
 
 class NeedAuthentication(Generic[T_Response], metaclass=abc.ABCMeta):
@@ -21,28 +26,23 @@ class NeedAuthentication(Generic[T_Response], metaclass=abc.ABCMeta):
 
     def __init__(self, endpoint: Callable[[], Awaitable[T_Response]]) -> None:
         self.endpoint = endpoint
-        describe_response(
-            "401",
-            content={
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "message": {"type": "string"},
-                        },
-                    }
-                }
-            },
-            headers={
+        describe_extra_docs(endpoint, {"security": [{"BearerAuth": []}]})
+
+    async def __call__(
+        self,
+    ) -> Annotated[
+        T_Response,
+        JSONResponse[
+            401,
+            {
                 "WWW-Authenticate": {
                     "description": "Bearer token",
                     "schema": {"type": "string"},
                 }
             },
-        )(endpoint)
-        describe_extra_docs(endpoint, {"security": [{"BearerAuth": []}]})
-
-    async def __call__(self) -> T_Response:
+            Message,
+        ],
+    ]:
         authorization = request.headers.get("Authorization", None)
         if authorization is None:
             raise HTTPException(
