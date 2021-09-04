@@ -1,7 +1,7 @@
 import abc
 from http import HTTPStatus
-from typing import Any, Literal
-from typing_extensions import Annotated
+from typing import Any
+from typing_extensions import Annotated, Literal
 
 from indexpy import Body, Query, HttpView, JSONResponse
 from pydantic.main import create_model

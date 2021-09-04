@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import abc
 from http import HTTPStatus
-from typing import Annotated, Awaitable, Callable, Generic, TypeVar
+from typing import Awaitable, Callable, Generic, TypeVar
+from typing_extensions import Annotated
 
 from indexpy import HTTPException, JSONResponse, request, status
 from indexpy.openapi import describe_extra_docs

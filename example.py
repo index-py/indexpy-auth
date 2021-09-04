@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing_extensions import Annotated
 from indexpy import Index, Routes, PlainTextResponse
 from indexpy.openapi import OpenAPI
 
