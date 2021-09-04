@@ -3,11 +3,11 @@ from __future__ import annotations
 import abc
 from http import HTTPStatus
 from typing import Awaitable, Callable, Generic, TypeVar
-from typing_extensions import Annotated
 
 from indexpy import HTTPException, JSONResponse, request, status
 from indexpy.openapi import describe_extra_docs
 from pydantic import BaseModel
+from typing_extensions import Annotated
 
 T_Response = TypeVar("T_Response")
 

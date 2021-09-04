@@ -1,10 +1,10 @@
 import abc
 from http import HTTPStatus
 from typing import Any
-from typing_extensions import Annotated, Literal
 
-from indexpy import Body, Query, HttpView, JSONResponse
+from indexpy import Body, HttpView, JSONResponse, Query
 from pydantic.main import create_model
+from typing_extensions import Annotated, Literal
 
 
 class LogInAndOut(HttpView, abc.ABC):
